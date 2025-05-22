@@ -12,6 +12,10 @@ env/
 pip-wheel-metadata/
 *.log
 
+# ExcelTimeToGCal
+credentials.json
+token.json
+
 # VS Code
 .vscode/
 
