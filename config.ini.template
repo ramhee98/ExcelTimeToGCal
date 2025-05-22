@@ -1,0 +1,19 @@
+[calendar]
+# The target calendar ID (use 'primary' or a full calendar address)
+calendar_id = cal@group.calendar.google.com
+
+# The title that will appear for each event
+summary = Work
+
+# Description text for each event
+description = ExcelTimeToGCal
+
+# If true, existing events with the same description will be replaced
+replace_event = true
+
+[excel]
+# Path to the Excel file containing time entries
+excel_file = calendar.xlsx
+
+# Number of days to look back from today
+days_back = 7
