@@ -20,7 +20,7 @@ def load_config(path='config.ini'):
         'days_back': int(config['excel']['days_back'])
     }
 
-def get_calendar_service(token_file="token.json", credentials_file="credentials.json"):
+def get_calendar_service(pwd, token_file="token.json", credentials_file="credentials.json"):
     """
     Handles Google Calendar API authentication and returns a service object.
 
@@ -29,6 +29,8 @@ def get_calendar_service(token_file="token.json", credentials_file="credentials.
     """
     # If modifying these SCOPES, delete token.json
     SCOPES = ['https://www.googleapis.com/auth/calendar.events']
+    token_file = pwd + "/" + token_file
+    credentials_file = pwd + "/" + credentials_file
 
     creds = None
     # Load token if it exists
@@ -155,8 +157,11 @@ def parse_all_sheets(xls_dict, days_back=None):
     return all_entries
 
 def main():
+    # get current path
+    pwd = str(os.path.dirname(os.path.abspath(__file__)))
+
     #load configuration
-    cfg = load_config()
+    cfg = load_config(pwd + "/config.ini")
     calendar_id = cfg['calendar_id']
     summary = cfg['summary']
     description = cfg['description']
@@ -165,7 +170,7 @@ def main():
     days_back = cfg['days_back']
 
     # connect service
-    service = get_calendar_service()
+    service = get_calendar_service(pwd)
 
     # reading events from excel
     xls = pd.read_excel(excel_file, sheet_name=None, index_col=0)
