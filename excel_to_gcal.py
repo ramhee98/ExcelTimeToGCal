@@ -69,11 +69,15 @@ def create_event(service, calendar_id, summary, description, start_datetime, end
         orderBy='startTime'
     ).execute()
 
-    if replace_event:
-        for event in events_result.get('items', []):
-            if event.get('description', '') == description:
+    for event in events_result.get('items', []):
+        if event.get('description', '') == description:
+            if replace_event:
                 service.events().delete(calendarId=calendar_id, eventId=event['id']).execute()
                 print(f"Deleted existing event: {event.get('summary')} on {start_datetime.date()}")
+            else:
+                print(f"Skipped existing event on {start_datetime.date()}: '{description}'")
+                return None
+
 
     # Create event if no match found
     event = {
