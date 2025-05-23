@@ -3,7 +3,6 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
-from datetime import datetime
 import pandas as pd
 from datetime import datetime, timedelta, time
 import configparser
@@ -167,9 +166,11 @@ def main():
 
     # connect service
     service = get_calendar_service()
+
     # reading events from excel
     xls = pd.read_excel(excel_file, sheet_name=None, index_col=0)
     entries = parse_all_sheets(xls, days_back)
+
     # create events
     for entry in entries:
         create_event(service, calendar_id, summary, description, entry['start'], entry['end'], "Europe/Zurich", replace_event)
