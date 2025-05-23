@@ -21,7 +21,7 @@ def load_config(path='config.ini'):
         'days_back': int(config['excel']['days_back'])
     }
 
-def get_calendar_service():
+def get_calendar_service(token_file="token.json", credentials_file="credentials.json"):
     """
     Handles Google Calendar API authentication and returns a service object.
 
@@ -33,18 +33,18 @@ def get_calendar_service():
 
     creds = None
     # Load token if it exists
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    if os.path.exists(token_file):
+        creds = Credentials.from_authorized_user_file(token_file, SCOPES)
 
     # If token is invalid or missing, log in and save new token
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(credentials_file, SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the new token
-        with open('token.json', 'w') as token_file:
+        with open(token_file, 'w') as token_file:
             token_file.write(creds.to_json())
 
     # Build and return the calendar service
