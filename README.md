@@ -44,6 +44,22 @@ The script will:
 - Parse all sheets
 - Create or replace events in your calendar
 
+## Google Cloud Setup
+
+To use this script, you must enable the Google Calendar API and download credentials:
+
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
+2. Create a new project (or select an existing one).
+3. Navigate to **APIs & Services > Library**.
+4. Search for **Google Calendar API** and click **Enable**.
+5. Go to **APIs & Services > Credentials**.
+6. Click **Create Credentials > OAuth client ID**.
+   - Choose **Desktop App**.
+   - Name it e.g. `ExcelTimeToGCal`.
+7. Download the generated `credentials.json` file and place it in your project directory.
+
+> The script will use this to authenticate and create `token.json` on first run.
+
 ## Authentication
 
 On the first run, the script will open a browser window to authenticate with your Google account. It will save a `token.json` for future access.
