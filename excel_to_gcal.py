@@ -123,6 +123,10 @@ def parse_workdays_from_dataframe(df, days_back=None):
         if date_cutoff and date < date_cutoff:
             continue  # skip too-old entries
 
+        ist_zeit = float(df.loc['Ist zeit', col])
+        if ist_zeit < 0:
+            continue  # Skip if time is below 0
+
         start_raw = df.loc['Start', col]
         if pd.isna(start_raw) or str(start_raw).strip() == "":
             continue
@@ -139,7 +143,6 @@ def parse_workdays_from_dataframe(df, days_back=None):
         else:
             raise TypeError(f"Unsupported start time format: {type(start_raw)}")
 
-        ist_zeit = float(df.loc['Ist zeit', col])
         start_datetime = datetime.combine(date, start_time)
         end_datetime = start_datetime + timedelta(hours=ist_zeit)
 
