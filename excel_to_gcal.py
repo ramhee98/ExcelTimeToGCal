@@ -40,7 +40,11 @@ def get_calendar_service(pwd, token_file="token.json", credentials_file="credent
     # If token is invalid or missing, log in and save new token
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
+            try:
+                creds.refresh(Request())
+            except:
+                os.remove(token_file)
+                print("Token expired, please renew.")
         else:
             flow = InstalledAppFlow.from_client_secrets_file(credentials_file, SCOPES)
             creds = flow.run_local_server(port=0)
