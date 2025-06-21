@@ -4,6 +4,6 @@ cd "$HOME/ExcelTimeToGCal"
 unset PYTHONPATH
 unset PYTHONHOME
 
-"$HOME/ExcelTimeToGCal/.venv/bin/python" excel_to_gcal.py
+"$HOME/ExcelTimeToGCal/.venv/bin/python" excel_to_gcal.py >> ExcelTimeToGCal.app.log
 
 exit 0
