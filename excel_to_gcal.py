@@ -1,3 +1,21 @@
+import os
+import sys
+
+# Determine the directory of the script (portable, not hardcoded)
+script_dir = os.path.dirname(os.path.realpath(__file__))
+
+# Set working directory to script location
+os.chdir(script_dir)
+
+# Remove first sys.path entry if it's '', '/', or cwd
+cwd = os.getcwd()
+if sys.path[0] in ('', cwd, '/'):
+    sys.path.pop(0)
+
+# Insert the script directory explicitly (safe)
+if script_dir not in sys.path:
+    sys.path.insert(0, script_dir)
+
 import os.path
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow

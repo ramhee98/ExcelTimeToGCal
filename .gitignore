@@ -16,7 +16,6 @@ pip-wheel-metadata/
 credentials.json
 token.json
 config.ini
-*.sh
 
 # VS Code
 .vscode/

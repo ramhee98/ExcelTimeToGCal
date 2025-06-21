@@ -1,0 +1,9 @@
+#!/bin/sh
+
+cd "$HOME/ExcelTimeToGCal"
+unset PYTHONPATH
+unset PYTHONHOME
+
+"$HOME/ExcelTimeToGCal/.venv/bin/python" excel_to_gcal.py
+
+exit 0
