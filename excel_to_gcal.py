@@ -23,6 +23,7 @@ from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 import pandas as pd
 from datetime import datetime, timedelta, time
+from zoneinfo import ZoneInfo
 import configparser
 
 def load_config(path='config.ini'):
@@ -87,15 +88,18 @@ def create_event(service, calendar_id, summary, description, start_datetime, end
     """
     Creates a new event in Google Calendar unless an event with the same description exists on the same day.
     """
-    # Format date for filtering (00:00 to 23:59 on the same day)
-    start_of_day = start_datetime.replace(hour=0, minute=0, second=0, microsecond=0)
+    # The Excel-derived datetimes are naive local times. Attach the configured
+    # timezone before sending them to the Calendar API so timeMin/timeMax are
+    # interpreted in the user's zone instead of being silently treated as UTC.
+    tz = ZoneInfo(timezone)
+    start_of_day = start_datetime.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=tz)
     end_of_day = start_of_day + timedelta(days=1)
 
     # Check for existing events on the same day
     events_result = service.events().list(
         calendarId=calendar_id,
-        timeMin=start_of_day.isoformat() + 'Z',
-        timeMax=end_of_day.isoformat() + 'Z',
+        timeMin=start_of_day.isoformat(),
+        timeMax=end_of_day.isoformat(),
         singleEvents=True,
         orderBy='startTime'
     ).execute()
