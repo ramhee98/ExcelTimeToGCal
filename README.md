@@ -16,6 +16,10 @@ Automatically create Google Calendar events from a structured Excel timesheet us
 - Google Calendar API enabled
 - `credentials.json` in your working directory (from Google Cloud Console)
 
+## macOS App
+
+A prebuilt macOS application bundle (`ExcelTimeToGCal.app`) is included in the repository. It can be launched directly on macOS without a separate Python installation.
+
 ## Installation
 
 ```bash
