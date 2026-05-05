@@ -148,6 +148,14 @@ def parse_workdays_from_dataframe(df, days_back=None):
     today = datetime.now().date()
     date_cutoff = today - timedelta(days=days_back) if days_back else None
 
+    # Verify the rows the parser expects to find actually exist; without this
+    # a typo or renamed row would crash with a KeyError mid-loop.
+    required_rows = ('Datum', 'Start', 'Ist zeit')
+    missing = [row for row in required_rows if row not in df.index]
+    if missing:
+        print(f"Skipping sheet: missing required row(s): {', '.join(missing)}")
+        return entries
+
     for col in df.columns:
         date_raw = df.loc['Datum', col]
         if pd.isna(date_raw) or str(date_raw).strip() == "":
