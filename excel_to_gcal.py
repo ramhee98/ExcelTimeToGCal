@@ -221,6 +221,13 @@ def main():
     # connect service
     service = get_calendar_service(pwd)
 
+    # Verify the configured Excel file exists before talking to Google so a
+    # bad path fails fast with a clear message instead of a pandas traceback.
+    if not os.path.isfile(excel_file):
+        print(f"❌ Excel file not found: {excel_file}")
+        print("   Update 'excel_file' in config.ini to point at an existing .xlsx file.")
+        return
+
     # reading events from excel
     xls = pd.read_excel(excel_file, sheet_name=None, index_col=0)
     entries = parse_all_sheets(xls, days_back)
