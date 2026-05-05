@@ -158,9 +158,16 @@ def parse_workdays_from_dataframe(df, days_back=None):
         if date_cutoff and date < date_cutoff:
             continue  # skip too-old entries
 
-        ist_zeit = float(df.loc['Ist zeit', col])
-        if ist_zeit < 0:
-            continue  # Skip if time is below 0
+        ist_raw = df.loc['Ist zeit', col]
+        if pd.isna(ist_raw) or str(ist_raw).strip() == "":
+            continue  # No worked-hours value recorded for this day
+        try:
+            ist_zeit = float(ist_raw)
+        except (TypeError, ValueError):
+            print(f"Skipping column {col!r}: 'Ist zeit' is not numeric ({ist_raw!r})")
+            continue
+        if ist_zeit <= 0:
+            continue  # Skip non-positive durations
 
         start_raw = df.loc['Start', col]
         if pd.isna(start_raw) or str(start_raw).strip() == "":
