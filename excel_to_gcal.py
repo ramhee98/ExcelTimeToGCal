@@ -67,8 +67,8 @@ def get_calendar_service(pwd, token_file="token.json", credentials_file="credent
             flow = InstalledAppFlow.from_client_secrets_file(credentials_file, SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the new token
-        with open(token_file, 'w') as token_file:
-            token_file.write(creds.to_json())
+        with open(token_file, 'w') as token_fp:
+            token_fp.write(creds.to_json())
 
     # Build and return the calendar service
     service = build('calendar', 'v3', credentials=creds)
