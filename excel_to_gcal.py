@@ -60,10 +60,19 @@ def get_calendar_service(pwd, token_file="token.json", credentials_file="credent
         if creds and creds.expired and creds.refresh_token:
             try:
                 creds.refresh(Request())
-            except:
-                os.remove(token_file)
-                print("Token expired, please renew.")
-        else:
+            except Exception as refresh_error:
+                # Drop the now-useless token so the next run re-prompts via
+                # OAuth, but don't crash if it was already removed and don't
+                # swallow KeyboardInterrupt/SystemExit (the bare except did).
+                try:
+                    os.remove(token_file)
+                except FileNotFoundError:
+                    pass
+                except OSError as remove_error:
+                    print(f"Could not remove stale token file '{token_file}': {remove_error}")
+                print(f"Token refresh failed ({refresh_error}); please renew.")
+                creds = None
+        if not creds:
             flow = InstalledAppFlow.from_client_secrets_file(credentials_file, SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the new token
